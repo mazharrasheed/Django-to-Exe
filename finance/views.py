@@ -113,16 +113,16 @@ def activate_license(request):
             messages.error(request, "License key does not match this machine")
             print('data["machine_id"]',data["machine_id"])
             return redirect('/license/activate/')
-        # expiry = date.fromisoformat(data["expiry"])
+        expiry = date.fromisoformat(data["expiry"])
         # if expiry < date.today():
         #     messages.error(request, "License has expired")
         #     print('expiry < date.today()')
             # return redirect('/license/activate/')
         # Save license in DB
         License.objects.update_or_create(
-            machine_id=machine_id,
-            defaults={"is_active": True,}
-            # defaults={"is_active": True, "expiry_date": expiry}
+            machine_id=machine_id,license_key=license_key,
+            # defaults={"is_active": True,}
+            defaults={"is_active": True, "expiry_date": expiry}
         )
         messages.success(request, "License activated successfully")
         return redirect('/')  # redirect to home
